@@ -28,7 +28,10 @@ public class CDOffering {
 	}
 	
 	
-	String writeToString() {
+	public String writeToString() {
+		StringBuilder cdoStringBuilder = new StringBuilder(term + "," + interestRate);
+		String toString = cdoStringBuilder.toString();
+		return toString;
 		
 	}
 

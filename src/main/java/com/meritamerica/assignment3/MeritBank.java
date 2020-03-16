@@ -1,10 +1,65 @@
 package com.meritamerica.assignment3;
 
+import java.io.*;
+
+
 public class MeritBank {
 	
 	public static AccountHolder[] accountHolders;
 	public static CDOffering[] CDOfferings;
-	public static long nextAccountNumber = 12345000;
+	public static long nextAccountNumber = 12345001;
+	
+	
+	
+	
+	static boolean readFromFile(String fileName) {
+		try {
+			BufferedReader bufRead = new BufferedReader(new FileReader(fileName));
+			
+			String line;
+			
+			while ((line = bufRead.readLine()) != null) {
+				//need to change this part
+				System.out.println(line);
+			}
+			bufRead.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	
+	
+	static boolean writeToFile(String fileName) {
+		try {
+			
+			BufferedWriter bufWrite = new BufferedWriter(new FileWriter(fileName));
+			StringBuilder lastSB = new StringBuilder(nextAccountNumber + "\n" + CDOfferings.length + "\n");
+			for(CDOffering cdO : CDOfferings){
+				lastSB.append(cdO.writeToString() + "\n");
+			}
+			lastSB.append(accountHolders.length + "\n");
+			for(AccountHolder sbac : accountHolders) {
+				lastSB.append(sbac.writeToString() + "\n");
+			}
+			String toBeWritten = lastSB.toString();
+			
+			//put writer here
+			bufWrite.write(toBeWritten);
+			
+			bufWrite.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+		
+	}
+
+	
+	
 	
 	
 	
@@ -27,8 +82,12 @@ public class MeritBank {
 		return accountHolders;
 	}
 	
+	public static AccountHolder[] sortAccountHolders() {
+		return accountHolders = AccountHolder.sortAccounts(accountHolders);
+		
+	}
 	
-	static CDOffering[] getCDOfferings(){
+	public static CDOffering[] getCDOfferings(){
 		return CDOfferings;
 	}
 	
@@ -65,8 +124,14 @@ public class MeritBank {
 	
 	
 	static long getNextAccountNumber(){
+		long tempNAC = nextAccountNumber;
 		nextAccountNumber++;
-		return nextAccountNumber;
+		return tempNAC;
+	}
+	
+	public static void setNextAccountNumber(long nextAccountNumbe) {
+		nextAccountNumber = nextAccountNumbe;
+		
 	}
 	
 	

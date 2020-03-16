@@ -12,7 +12,7 @@ public class CDAccount extends BankAccount {
 	
 	
      public void setFutureValue() {
-	    super.setFutureValue(Term);	
+	    super.FutureValue(Term);	
 				
      }
      
@@ -30,6 +30,10 @@ public class CDAccount extends BankAccount {
 
      }
      //Override writeToString method to include term
-     
+     public String writeToString() {
+ 		StringBuilder sb = new StringBuilder(getAccountNumber() + "," + getBalance() + "," + Term + "," + getIntrestRate() + "," + getOpenedOn());
+ 		String toBeReturned = sb.toString();
+ 		return toBeReturned;
+ 	}
      
 }

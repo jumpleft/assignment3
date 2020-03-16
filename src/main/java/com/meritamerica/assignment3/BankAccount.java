@@ -111,9 +111,10 @@ public class BankAccount {
 		
 	}
 	
-	String writeToString() {
-		
-		
+	public String writeToString() {
+		StringBuilder sb = new StringBuilder(accountNumber + "," + balance + "," + intrestRate + "," + openedOn);
+		String toBeReturned = sb.toString();
+		return toBeReturned;
 	}
 			
 			

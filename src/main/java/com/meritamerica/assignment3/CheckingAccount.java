@@ -10,4 +10,11 @@ public class CheckingAccount extends BankAccount {
 		super(startBalance , checkingInterestRate);
 	}
 	
+	static CheckingAccount readFromString(String accountData) {
+		//throws ParseException
+		//Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
+		
+	}	
+
+	
 }

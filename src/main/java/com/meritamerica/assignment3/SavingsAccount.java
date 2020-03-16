@@ -10,7 +10,10 @@ public static final double savingsInterestRate = 0.01;
 		super(startBalance , savingsInterestRate);
 	}	
 	
-	
-	
+	static SavingsAccount readFromString(String accountData) { 
+		//throws ParseException
+		//Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
+
+	}
 	
 }

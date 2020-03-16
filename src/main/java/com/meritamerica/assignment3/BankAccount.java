@@ -4,19 +4,50 @@ public class BankAccount {
 
 	private double balance;
 	private double intrestRate;
-	private double futureBalance;
-	private double accountNumber;
+	//private double futureBalance;
+	private long accountNumber;
+	private java.util.Date openedOn;
 	
-	public BankAccount(double balance, double intrestRate) {
+	public BankAccount(double balance, double interestRate) {
 		
 		this.balance = balance;
-		this.intrestRate = intrestRate;
+		this.intrestRate = interestRate;
 		this.accountNumber = MeritBank.getNextAccountNumber();
+		this.openedOn = new java.util.Date();
+		
 		
 	}
+	
+	public BankAccount(double balance, double interestRate, java.util.Date accountOpenedOn) {
+		
+		this.balance = balance;
+		this.intrestRate = interestRate;
+		this.accountNumber = MeritBank.getNextAccountNumber();
+		this.openedOn = accountOpenedOn;
+		
+	}
+	
+	public BankAccount(long accountNumber, double balance, double interestRate, java.util.Date accountOpenedOn) {
+		
+		this.balance = balance;
+		this.intrestRate = interestRate;
+		this.accountNumber = accountNumber;
+		this.openedOn = accountOpenedOn;
+		
+	}
+	
+	
+	
+	
+	
 
     //setters and getters 
-	public double getAccountNumber() {
+	public java.util.Date getOpenedOn() {
+		return openedOn;
+	}
+	
+	
+	public long getAccountNumber() {
 		return accountNumber;		
 	}
 	
@@ -62,6 +93,35 @@ public class BankAccount {
 		return ("");
 	}
 
+	public double FutureValue(int years) {
+			
+			double p = balance;
+			double i = intrestRate;
+			int n = years;
+			double future = p*(Math.pow((1+i),n));
+			return future;
+					
+	}
+	
+	static BankAccount readFromString(String accountData) {
+		//throws ParseException 
+		//Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
+		
+		
+		
+	}
+	
+	String writeToString() {
+		
+		
+	}
+			
+			
+
+	
+	
+	
+	/*
     public void setFutureValue(int years) {
 		
 		double p = balance;
@@ -80,7 +140,7 @@ public class BankAccount {
     	setFutureValue(years);
     	return futureBalance;
     }
-    
+    */
  
     
 				

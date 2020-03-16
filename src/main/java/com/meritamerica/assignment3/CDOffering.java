@@ -21,5 +21,18 @@ public class CDOffering {
 		return interestRate;
 	}
 	
+	static CDOffering readFromString(String cdOfferingDataString) {
+		//Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
+		
+		
+	}
+	
+	
+	String writeToString() {
+		
+	}
+
+	
+	
 	
 }

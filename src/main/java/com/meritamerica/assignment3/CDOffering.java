@@ -22,8 +22,23 @@ public class CDOffering {
 	}
 	
 	static CDOffering readFromString(String cdOfferingDataString) {
-		//Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
 		
+		CDOffering toBeAdded = null;
+		try{
+			String[] toBeParsed = cdOfferingDataString.split(",");
+			int termToAdd = Integer.parseInt(toBeParsed[0]);
+			double interestRateToBeAdded = Double.parseDouble(toBeParsed[1]);
+			
+			toBeAdded = new CDOffering(termToAdd , interestRateToBeAdded);
+			
+			
+			
+			
+		}catch(NumberFormatException exception) {
+			throw exception;		
+		}
+		
+		return toBeAdded;
 		
 	}
 	

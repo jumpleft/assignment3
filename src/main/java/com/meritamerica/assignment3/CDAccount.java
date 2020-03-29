@@ -1,19 +1,32 @@
 package com.meritamerica.assignment3;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class CDAccount extends BankAccount {
 	
-	private int Term;
+	private int term;
 	
 	
 	public CDAccount(CDOffering offering , double openingBalance) {
 		super(openingBalance , offering.getInterestRate());
-		this.Term = offering.getTerm();
+		this.term = offering.getTerm();
+	}
+	
+	public CDAccount(double startBalance , double interestRate , long accountNumber , java.util.Date startDate , int termToBeAdded) {
+		
+		super(accountNumber , startBalance , interestRate , startDate);
+		this.term = termToBeAdded;
+	}
+	
+	public int getTerm() {
+		return term;
 	}
 	
 	
-     public void setFutureValue() {
-	    super.FutureValue(Term);	
-				
+     public double futureValue() {
+	    double fvToReturn = super.futureValue(term);	
+		return fvToReturn;		
      }
      
      boolean withdraw(double amount) {
@@ -24,14 +37,39 @@ public class CDAccount extends BankAccount {
     	 return false;
      }
      
-     static CDAccount readFromString(String accountData) { 
+     static CDAccount readFromString(String accountData) {
+ 		
+    	 CDAccount toBeAdded = null;
+ 		try{
+ 			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+ 			String[] toBeParsed = accountData.split(",");
+ 			long accountNumberToAdd = Integer.parseInt(toBeParsed[0]);
+ 			double curentBalanceToBeAdded = Double.parseDouble(toBeParsed[1]);
+ 			double interestRateToBeAdded = Double.parseDouble(toBeParsed[2]);
+ 			java.util.Date dateToBeAdded = dateFormatter.parse(toBeParsed[3]);
+ 			int termToBeAdded = Integer.parseInt(toBeParsed[4]);
+ 			
+ 			toBeAdded = new CDAccount(curentBalanceToBeAdded , interestRateToBeAdded , accountNumberToAdd , dateToBeAdded , termToBeAdded);
+ 		
+ 		
+ 		}catch(NumberFormatException exception) {
+			throw exception;
+			
+		}catch(ParseException exception) { 
+			
+		}
+ 		
+ 		return toBeAdded;
+ 		
+ 	} 
     	 //throws ParseException
     	 //Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
 
-     }
-     //Override writeToString method to include term
+     
+     
+     @Override 
      public String writeToString() {
- 		StringBuilder sb = new StringBuilder(getAccountNumber() + "," + getBalance() + "," + Term + "," + getIntrestRate() + "," + getOpenedOn());
+ 		StringBuilder sb = new StringBuilder(getAccountNumber() + "," + getBalance() + "," + term + "," + getInterestRate() + "," + getOpenedOn());
  		String toBeReturned = sb.toString();
  		return toBeReturned;
  	}

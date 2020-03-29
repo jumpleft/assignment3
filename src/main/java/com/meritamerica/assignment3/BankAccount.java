@@ -1,9 +1,12 @@
 package com.meritamerica.assignment3;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class BankAccount {
 
 	private double balance;
-	private double intrestRate;
+	private double interestRate;
 	//private double futureBalance;
 	private long accountNumber;
 	private java.util.Date openedOn;
@@ -11,7 +14,7 @@ public class BankAccount {
 	public BankAccount(double balance, double interestRate) {
 		
 		this.balance = balance;
-		this.intrestRate = interestRate;
+		this.interestRate = interestRate;
 		this.accountNumber = MeritBank.getNextAccountNumber();
 		this.openedOn = new java.util.Date();
 		
@@ -21,7 +24,7 @@ public class BankAccount {
 	public BankAccount(double balance, double interestRate, java.util.Date accountOpenedOn) {
 		
 		this.balance = balance;
-		this.intrestRate = interestRate;
+		this.interestRate = interestRate;
 		this.accountNumber = MeritBank.getNextAccountNumber();
 		this.openedOn = accountOpenedOn;
 		
@@ -30,7 +33,7 @@ public class BankAccount {
 	public BankAccount(long accountNumber, double balance, double interestRate, java.util.Date accountOpenedOn) {
 		
 		this.balance = balance;
-		this.intrestRate = interestRate;
+		this.interestRate = interestRate;
 		this.accountNumber = accountNumber;
 		this.openedOn = accountOpenedOn;
 		
@@ -46,6 +49,13 @@ public class BankAccount {
 		return openedOn;
 	}
 	
+	public void setOpenedOn(java.util.Date date) {
+		this.openedOn = date;
+	}
+	
+	public void setAccountNumber(long theAccountNumber) {
+		this.accountNumber = theAccountNumber;
+	}	
 	
 	public long getAccountNumber() {
 		return accountNumber;		
@@ -61,13 +71,13 @@ public class BankAccount {
 	}
 
 
-	public double getIntrestRate() {
-		return intrestRate;
+	public double getInterestRate() {
+		return interestRate;
 	}
 
 
 	public void setIntrestRate(double intrestRate) {
-		this.intrestRate = intrestRate;
+		this.interestRate = intrestRate;
 	}
 	
 	
@@ -83,8 +93,11 @@ public class BankAccount {
 	}
 	
 	boolean deposit(double amount) {
+		if(amount > 0){
 		setBalance(getBalance()+amount);
 		return true;
+		}
+		return false;
 		
 	}
 
@@ -93,56 +106,43 @@ public class BankAccount {
 		return ("");
 	}
 
-	public double FutureValue(int years) {
+	public double futureValue(int years) {
 			
 			double p = balance;
-			double i = intrestRate;
+			double i = interestRate;
 			int n = years;
 			double future = p*(Math.pow((1+i),n));
 			return future;
 					
 	}
 	
-	static BankAccount readFromString(String accountData) {
-		//throws ParseException 
-		//Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
-		
-		
-		
-	}
-	
 	public String writeToString() {
-		StringBuilder sb = new StringBuilder(accountNumber + "," + balance + "," + intrestRate + "," + openedOn);
+		StringBuilder sb = new StringBuilder(accountNumber + "," + balance + "," + interestRate + "," + openedOn);
 		String toBeReturned = sb.toString();
 		return toBeReturned;
 	}
-			
-			
-
 	
-	
-	
-	/*
-    public void setFutureValue(int years) {
+	static BankAccount readFromString(String accountData) {
 		
-		double p = balance;
-		double i = intrestRate;
-		int n = years;
-		double future = p*(Math.pow((1+i),n));
-		futureBalance = future;
-				
-    }
-    
-    public double getFutureValue() {
-    	return futureBalance;
-    }
-    
-    public double getFutureValue(int years) {
-    	setFutureValue(years);
-    	return futureBalance;
-    }
-    */
- 
-    
-				
+		BankAccount toBeAdded = null;
+		try{
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+			String[] toBeParsed = accountData.split(",");
+			long accountNumberToAdd = Integer.parseInt(toBeParsed[0]);
+			double curentBalanceToBeAdded = Double.parseDouble(toBeParsed[1]);
+			double interestRateToBeAdded = Double.parseDouble(toBeParsed[2]);
+			java.util.Date dateToBeAdded = dateFormatter.parse(toBeParsed[3]);
+			
+			
+			toBeAdded = new BankAccount(accountNumberToAdd , curentBalanceToBeAdded , interestRateToBeAdded , dateToBeAdded);
+		
+		
+		}catch(ParseException | NumberFormatException exception) {
+						
+		}
+		
+		return toBeAdded;
+		
+	}
+	
 }

@@ -12,7 +12,13 @@ public class AccountHolder {
 	
 	
 	//need to adjust this to suit the calls when I find out what they are.
-	public AccountHolder(){}
+	public AccountHolder(String firstName, String middleName, String lastName, String ssn){
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.ssn = ssn;
+		bankAccounts = null;
+	}
 	
 	public AccountHolder(String firstName, String middleName, String lastName, String ssn, double checkingAccountOpeningBalance, double savingsAccountOpeningBalance) {
 		
@@ -51,7 +57,7 @@ public class AccountHolder {
 	
 	
 	
-	public double getHoldersTotal() {
+	public double getCombinedBalance() {
 		double holdersTotal = 0;
 		for(int i = 0 ; i < bankAccounts.length ; i++){
 			holdersTotal += bankAccounts[i].getBalance();
@@ -78,6 +84,29 @@ public class AccountHolder {
 		
 		
 	}
+	
+	public CheckingAccount addCheckingAccount(double startBalance) {
+		CheckingAccount toBeAdded = new CheckingAccount(startBalance);
+		BankAccount[] temp = {toBeAdded};
+		setBankAccounts(temp);
+		return toBeAdded;
+		
+	}
+	
+	public SavingsAccount addSavingsAccount(double startBalance) {
+		SavingsAccount toBeAdded = new SavingsAccount(startBalance);
+		BankAccount[] temp = {toBeAdded};
+		setBankAccounts(temp);
+		return toBeAdded;
+	}
+	
+	public CDAccount addCDAccount(CDOffering cDOffering , double startBalance) {
+		CDAccount toBeAdded = new CDAccount(cDOffering , startBalance);
+		BankAccount[] temp = {toBeAdded};
+		setBankAccounts(temp);
+		return toBeAdded;
+	}
+	
 	
 	public BankAccount[] getBankAccounts() {
 		return bankAccounts;
@@ -119,12 +148,67 @@ public class AccountHolder {
 		return ssn;
 	}
 	
+	public int getNumberOfCDAccounts() {
+		
+		int counterCDA = 0;
+		if(bankAccounts != null){
+			for(BankAccount ba : bankAccounts) {
+						
+				Class<? extends BankAccount> c = ba.getClass();
+				if(c == CDAccount.class) {
+					counterCDA++;
+				}
+			}
+	
+		}
+		return counterCDA;
+		
+	}
+	public int getNumberOfCheckingAccounts() {
+		
+		int counterCA = 0;
+		if(bankAccounts != null){
+			for(BankAccount ba : bankAccounts) {
+						
+				Class<? extends BankAccount> c = ba.getClass();
+				if(c == CDAccount.class) {
+					counterCA++;
+				}
+			}
+	
+		}
+		return counterCA;
+	}
+	
+	public int getNumberOfSavingsAccounts() {
+		
+		int counterSA = 0;
+		if(bankAccounts != null){
+			for(BankAccount ba : bankAccounts) {
+						
+				Class<? extends BankAccount> c = ba.getClass();
+				if(c == CDAccount.class) {
+					counterSA++;
+				}
+			}
+	
+		}
+		return counterSA;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	public static AccountHolder[] sortAccounts(AccountHolder[] toBeSorted) {
 		AccountHolder tempAH; 
 		
 		for(int i = 0 ; i < toBeSorted.length ; i++) {
 			for(int j = i + 1 ; j < toBeSorted.length ; j++) {
-				if(toBeSorted[i].getHoldersTotal() > toBeSorted[j].getHoldersTotal()) {
+				if(toBeSorted[i].getCombinedBalance() > toBeSorted[j].getCombinedBalance()) {
 					tempAH = toBeSorted[i];
 					toBeSorted[i] = toBeSorted[j];
 					toBeSorted[j] = tempAH;
@@ -139,23 +223,10 @@ public class AccountHolder {
 	public String writeToString() {
 		StringBuilder holderSB = new StringBuilder(firstName + "," + middleName + "," + lastName + "," + ssn + "\n");
 		
-		int counterCA = 0;
-		int counterSA = 0;
-		int counterCDA = 0;
+		int counterCA = getNumberOfCheckingAccounts();
+		int counterSA = getNumberOfSavingsAccounts();
+		int counterCDA = getNumberOfCDAccounts();
 	
-		
-		
-		for(BankAccount ba : bankAccounts) {
-						
-			Class<? extends BankAccount> c = ba.getClass();
-			if(c == CheckingAccount.class) {				
-				counterCA++;
-			}else if(c == SavingsAccount.class) {				
-				counterSA++;
-			}else if(c == CDAccount.class) {				
-				counterCDA++;
-			}
-		}
 		holderSB.append(counterCA + "\n");		
 		
 		for(BankAccount ba : bankAccounts) {
@@ -187,6 +258,29 @@ public class AccountHolder {
 		String toBeReturned = holderSB.toString();
 		return toBeReturned;
 	}
+	
+	static AccountHolder readFromString(String accountHolderData) {
+		AccountHolder toBeAdded = null;
+		try{
+			
+			String[] toBeParsed = accountHolderData.split(",");
+			String firstNameToBeAdded = toBeParsed[0];
+			String middleNameToBeAdded = toBeParsed[1];
+			String lastNameToBeAdded = toBeParsed[2];
+			String ssnToBeAdded = toBeParsed[3];
+			
+			toBeAdded = new AccountHolder(firstNameToBeAdded , middleNameToBeAdded , lastNameToBeAdded , ssnToBeAdded);
+			
+		}catch(java.lang.Exception exception){
+			
+		}
+		return toBeAdded;
+		
+	}
+			
+			//throws Exception	
+			//Should throw a java.lang.Exception if String cannot be correctly parsed
+
 	
 
 

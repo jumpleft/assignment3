@@ -1,6 +1,7 @@
 package com.meritamerica.assignment3;
 
 import java.io.*;
+import java.text.ParseException;
 
 
 public class MeritBank {
@@ -12,19 +13,59 @@ public class MeritBank {
 	
 	
 	
-	static boolean readFromFile(String fileName) {
+	public static boolean readFromFile(String fileName) {
 		try {
 			BufferedReader bufRead = new BufferedReader(new FileReader(fileName));
+				
+		
 			
-			String line;
+				
+				int tempIntForProssessing;
+				
+				setNextAccountNumber(Long.parseLong(bufRead.readLine()));
+				
+				
+				tempIntForProssessing = Integer.parseInt(bufRead.readLine());
+				clearCDOfferings();
+				CDOffering[] temp = new CDOffering[tempIntForProssessing];				
+				for(int i = 0 ; i < tempIntForProssessing ; i++) {
+					
+					temp[i] = CDOffering.readFromString(bufRead.readLine());									
+				}				
+				setCDOfferings(temp);
+				
+				
+				
+				tempIntForProssessing = Integer.parseInt(bufRead.readLine());
+				accountHolders = null;
+				for(int i = 0 ; i < tempIntForProssessing ; i++){
+					addAccountHolder(AccountHolder.readFromString(bufRead.readLine()));
+					int secoundTempIntForProssessing = Integer.parseInt(bufRead.readLine());
+					for(int j = 0 ; j < secoundTempIntForProssessing ; j++){
+						CheckingAccount ch = CheckingAccount.readFromString(bufRead.readLine());
+						BankAccount[] baa = {ch};
+						accountHolders[i].setBankAccounts(baa);
+					}
+					secoundTempIntForProssessing = Integer.parseInt(bufRead.readLine());
+					for(int j = 0 ; j < secoundTempIntForProssessing ; j++){
+						SavingsAccount ch = SavingsAccount.readFromString(bufRead.readLine());
+						BankAccount[] baa = {ch};
+						accountHolders[i].setBankAccounts(baa);
+					}
+					secoundTempIntForProssessing = Integer.parseInt(bufRead.readLine());
+					for(int j = 0 ; j < secoundTempIntForProssessing ; j++){
+						CDAccount ch = CDAccount.readFromString(bufRead.readLine());
+						BankAccount[] baa = {ch};
+						accountHolders[i].setBankAccounts(baa);
+					}
+					
+				}
 			
-			while ((line = bufRead.readLine()) != null) {
-				//need to change this part
-				System.out.println(line);
-			}
 			bufRead.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
+		}catch(NumberFormatException exception) {
 			return false;
 		}
 		return true;
@@ -36,7 +77,7 @@ public class MeritBank {
 		try {
 			
 			BufferedWriter bufWrite = new BufferedWriter(new FileWriter(fileName));
-			StringBuilder lastSB = new StringBuilder(nextAccountNumber + "\n" + CDOfferings.length + "\n");
+			StringBuilder lastSB = new StringBuilder(getNextAccountNumberForWriteToFileOnly() + "\n" + CDOfferings.length + "\n");
 			for(CDOffering cdO : CDOfferings){
 				lastSB.append(cdO.writeToString() + "\n");
 			}
@@ -45,7 +86,7 @@ public class MeritBank {
 				lastSB.append(sbac.writeToString() + "\n");
 			}
 			String toBeWritten = lastSB.toString();
-			
+			System.out.println(toBeWritten);
 			//put writer here
 			bufWrite.write(toBeWritten);
 			
@@ -67,12 +108,13 @@ public class MeritBank {
 		if(accountHolders == null){
 			AccountHolder[] freshstart = {accountHolder};
 			accountHolders = freshstart;
-		}else{
+		}else{			
 			AccountHolder[] temp = new  AccountHolder[accountHolders.length + 1];
 			for(int i = 0 ; i < accountHolders.length ; i++){
-				temp[i] = accountHolders[i];
+				temp[i] = accountHolders[i];				
 			}
-			temp[accountHolders.length + 1] = accountHolder;
+			temp[accountHolders.length] = accountHolder;
+			accountHolders = temp;
 				
 		}		
 	}
@@ -90,6 +132,23 @@ public class MeritBank {
 	public static CDOffering[] getCDOfferings(){
 		return CDOfferings;
 	}
+	
+	static long getNextAccountNumber(){
+		long tempNAC = nextAccountNumber;
+		nextAccountNumber++;
+		return tempNAC;
+	}
+	
+	static long getNextAccountNumberForWriteToFileOnly() {
+		return nextAccountNumber;
+	}
+	
+	
+	public static void setNextAccountNumber(long nextAccountNumbe) {
+		nextAccountNumber = nextAccountNumbe;
+		
+	}
+			
 	
 	
 	//static CDOffering getBestCDOffering(double depositAmount){}
@@ -123,16 +182,7 @@ public class MeritBank {
 	}
 	
 	
-	static long getNextAccountNumber(){
-		long tempNAC = nextAccountNumber;
-		nextAccountNumber++;
-		return tempNAC;
-	}
 	
-	public static void setNextAccountNumber(long nextAccountNumbe) {
-		nextAccountNumber = nextAccountNumbe;
-		
-	}
 	
 	
 	//static double totalBalances(){}
